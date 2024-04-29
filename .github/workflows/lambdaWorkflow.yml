@@ -17,11 +17,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y awscli
-
+          
+      - name: Zip Lambda function
+        run: |
+          zip -r lambda.zip index.js
+          
       - name: Deploy to Lambda
         run: |
           
-          aws lambda update-function-code --function-name github-function --no-zip-file --publish --source-code fileb://index.js
+          aws lambda update-function-code --function-name github-function zip-file  fileb://lambda.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
